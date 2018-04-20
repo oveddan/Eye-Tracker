@@ -237,7 +237,7 @@ class EyeTracker(object):
         if not os.path.exists(ckpt):
             os.makedirs(ckpt)
 
-        print 'Train on %s samples, validate on %s samples' % (train_data[0].shape[0], val_data[0].shape[0])
+        print('Train on %s samples, validate on %s samples' % (train_data[0].shape[0], val_data[0].shape[0]))
         # Define loss and optimizer
         self.cost = tf.losses.mean_squared_error(self.y, self.pred)
         self.optimizer = tf.train.AdamOptimizer(learning_rate=lr).minimize(self.cost)
@@ -296,15 +296,15 @@ class EyeTracker(object):
                 if val_loss - min_delta < best_loss:
                     best_loss = val_loss
                     save_path = saver.save(sess, out_model, global_step=n_epoch)
-                    print "Model saved in file: %s" % save_path
+                    print("Model saved in file: %s" % save_path)
                     n_incr_error = 0
 
                 if n_epoch % print_per_epoch == 0:
-                    print 'Epoch %s/%s, train loss: %.5f, train error: %.5f, val loss: %.5f, val error: %.5f' % \
-                                                (n_epoch, max_epoch, train_loss, train_err, val_loss, val_err)
+                    print('Epoch %s/%s, train loss: %.5f, train error: %.5f, val loss: %.5f, val error: %.5f' % \
+                                                (n_epoch, max_epoch, train_loss, train_err, val_loss, val_err))
 
                 if n_incr_error >= patience:
-                    print 'Early stopping occured. Optimization Finished!'
+                    print('Early stopping occured. Optimization Finished!')
                     return train_loss_history, train_err_history, val_loss_history, val_err_history
 
             return train_loss_history, train_err_history, val_loss_history, val_err_history
@@ -329,7 +329,7 @@ def load_model(session, save_path):
     Returns:
         The inputs placehoder and the prediction operation.
     """
-    print "Loading model from file '%s'..." % save_path
+    print("Loading model from file '%s'..." % save_path)
 
     meta_file = save_path + ".meta"
     if not os.path.exists(meta_file):
@@ -351,7 +351,7 @@ def validate_model(session, val_data, val_ops):
         val_ops: The validation operations.
     Returns:
         The overall validation error for the model. """
-    print "Validating model..."
+    print("Validating model...")
 
     eye_left, eye_right, face, face_mask, pred = val_ops
     val_eye_left, val_eye_right, val_face, val_face_mask, val_y = val_data
@@ -409,7 +409,7 @@ def train(args):
                                             print_per_epoch=args.print_per_epoch,
                                             out_model=args.save_model)
 
-    print 'runtime: %.1fs' % (timeit.default_timer() - start)
+    print('runtime: %.1fs' % (timeit.default_timer() - start))
 
     if args.save_loss:
         with open(args.save_loss, 'w') as outfile:
@@ -431,7 +431,7 @@ def test(args):
     with tf.Session() as sess:
         val_ops = load_model(sess, args.load_model)
         error = validate_model(sess, val_data, val_ops)
-        print 'Overall validation error: %f' % error
+        print('Overall validation error: %f' % error)
 
 def main():
     parser = argparse.ArgumentParser()

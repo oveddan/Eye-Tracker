@@ -31,8 +31,8 @@ def extract_validation_handles(session):
   # operation in a collection called "validation_nodes".
   valid_nodes = tf.get_collection_ref("validation_nodes")
   if len(valid_nodes) != 5:
-    print("ERROR: Expected 3 items in validation_nodes, got %d." % \
-          (len(valid_nodes)))
+    print(("ERROR: Expected 3 items in validation_nodes, got %d." % \
+          (len(valid_nodes))))
     sys.exit(1)
 
   # Figure out which is which.
@@ -92,12 +92,12 @@ def load_model(session, save_path):
   Returns:
     The inputs placehoder and the prediction operation.
   """
-  print("Loading model from file '%s'..." % (save_path))
+  print(("Loading model from file '%s'..." % (save_path)))
 
   meta_file = save_path + ".meta"
   if not os.path.exists(meta_file):
-    print("ERROR: Expected .meta file '%s', but could not find it." % \
-          (meta_file))
+    print(("ERROR: Expected .meta file '%s', but could not find it." % \
+          (meta_file)))
     sys.exit(1)
 
   saver = tf.train.import_meta_graph(meta_file)
@@ -159,7 +159,7 @@ def validate_model(session, val_data, eye_left, eye_right, face, face_mask, pred
 
 
 
-    print("Validating batch %d of %d..." % (i + 1, num_iters))
+    print(("Validating batch %d of %d..." % (i + 1, num_iters)))
     yp = session.run(predict_op,
                      feed_dict={eye_left: eye_left_batch / 255.,
                                 eye_right: eye_right_batch / 255.,
@@ -188,7 +188,7 @@ def try_with_random_data(session, eye_left, eye_right, face, face_mask, predict_
   face_batch = np.random.rand(batch_size, 64, 64, 3)
   face_mask_batch = np.random.rand(batch_size, 25, 25)
 
-  print("Batch of shape (%d, 64, 64, 3)" % (batch_size))
+  print(("Batch of shape (%d, 64, 64, 3)" % (batch_size)))
 
   # Put it through the model.
   predictions = session.run(predict_op, feed_dict={eye_left: eye_left_batch,
@@ -210,7 +210,7 @@ def main():
   if not args.val_data_file:
     print("Not validating, but checking network compatibility...")
   elif not os.path.exists(args.val_data_file):
-    print("ERROR: Could not find validation data '%s'." % (args.val_data))
+    print(("ERROR: Could not find validation data '%s'." % (args.val_data)))
     sys.exit(1)
 
   # Load and validate the network.
@@ -220,7 +220,7 @@ def main():
       val_data = load_validation_data(args.val_data_file)
       accuracy = validate_model(session, val_data, eye_left, eye_right, face, face_mask, predict_op)
 
-      print("Overall validation error: %f cm" % (accuracy))
+      print(("Overall validation error: %f cm" % (accuracy)))
       print("Network seems good. Go ahead and submit")
 
     else:
